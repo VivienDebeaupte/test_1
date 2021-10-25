@@ -1,0 +1,5 @@
+- base de données relationnelle MYSQL
+- fichier acseo.sql pour le schema de base de données
+- accès webmaster user/password : admin/test2021
+- dossier de fichiers JSON "messages_json" dans le dossier public/
+- .htaccess à la racine du dossier messages_json/ qui interdit l'accès au dossier dans l'URL

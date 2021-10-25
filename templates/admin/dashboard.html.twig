@@ -1,0 +1,64 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block subtitle %} Admin dashboard{% endblock %}
+
+{% block body %}
+
+    <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px; border-left: solid 1px #dfdfdf">
+        <a href="" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
+            <span class="fs-5 fw-semibold">Contacts List</span>
+        </a>
+        <div class="list-group list-group-flush border-bottom scrollarea">
+
+            {% for contact in contacts %}
+                <a href="#" data-id="{{ contact.id }}" class="list-group-item list-group-item-action py-3 lh-tight" aria-current="true">
+                    <div class="d-flex w-100 align-items-center justify-content-between">
+                        <strong class="mb-1">{{ contact.name }}</strong>
+                        <small>{{ contact.messages.last().date | date('d/m/Y H:i') }}</small>
+                    </div>
+                    <div class="col-10 mb-1 small">{{ contact.messages.last().subject }}</div>
+                </a>
+            {% else %}
+
+            {% endfor %}
+        </div>
+    </div>
+
+    <div id="board" class="col p-5" style="border-left: solid 1px #dfdfdf"></div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+
+        $('.list-group-item').each(function() {
+            $(this).removeClass('active');
+        });
+        $('.list-group-item').on('click', function() {
+            let element = $(this);
+            let id = $(this).data('id');
+            let route = "/contact/"+id+"/show";
+
+            $.ajax({
+                url: route,
+                type: 'GET',
+                success: function (response) {
+                    $('.list-group-item').each(function() {
+                        $(this).removeClass('active');
+                    });
+                    element.addClass('active')
+                    $('#board').html(response);
+
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+        });
+
+
+
+
+    </script>
+{% endblock %}
+

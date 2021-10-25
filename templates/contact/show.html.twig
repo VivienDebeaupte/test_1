@@ -1,0 +1,43 @@
+<div class="row mb-2">
+    <h3>{{ contact.name }}</h3><small>{{ contact.email }}</small>
+</div>
+
+
+<section>
+    {% for message in contact.messages | reverse %}
+        <div class="card {% if message.done == true %}text-white bg-success{% endif %} mb-3">
+            <div class="card-header">
+                <small>{{ message.date | date('d/m/Y H:i') }}</small>
+                <div style="float: right" class="form-check form-switch">
+                    <input {% if message.done == true %}checked="checked"{% endif %} data-id="{{ message.id }}" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault_{{ message.id }}">
+                    <label class="form-check-label" for="flexSwitchCheckDefault_{{ message.id }}">Done</label>
+                </div>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ message.subject }}</h5>
+                <p class="card-text">{{ message.content }}</p>
+            </div>
+        </div>
+    {% endfor %}
+</section>
+
+<script>
+    $('.form-check-input').on('click', function() {
+
+        let id = $(this).data('id');
+        let route = "/contact/"+id+"/status";
+
+        $.ajax({
+            url: route,
+            type: 'GET',
+            success: function (response) {
+                $('#board').html(response);
+
+            },
+            error: function (error) {
+                console.log(error)
+            }
+        });
+
+    });
+</script>
